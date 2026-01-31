@@ -23,8 +23,8 @@
   "scripts": {
     "build": "bun run build:esm && bun run build:cjs && bun run build:types",
     "build:esm": "bun build src/index.ts --outdir dist --format esm --sourcemap=external --target=node",
-    "build:cjs": "bun build src/index.ts --outfile dist/index.cjs --format cjs --sourcemap=external --target=node",
-    "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist",
+    "build:cjs": "bun build src/index.ts --outdir dist --format cjs --sourcemap=external --target=node --entry-naming [dir]/[name].cjs",
+    "build:types": "dts-bundle-generator -o dist/index.d.ts src/index.ts && cp dist/index.d.ts dist/index.d.cts",
     "test": "bun test --watch",
     "test:run": "bun test",
     "lint": "biome lint src scripts",
@@ -63,6 +63,7 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@types/bun": "^1.1.6",
+    "dts-bundle-generator": "^9.5.1",
     "semantic-release": "^24.0.0",
     "typescript": "^5.4.5"
   }

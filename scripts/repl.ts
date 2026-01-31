@@ -1,4 +1,4 @@
-#!/usr/bin/env npx tsx
+#!/usr/bin/env bun
 
 import * as repl from 'node:repl';
 import { RenderClient } from '../src/index.js';
@@ -9,11 +9,11 @@ if (!API_KEY) {
   console.error('\x1b[31mError: RENDER_API_KEY environment variable is not set.\x1b[0m');
   console.error('');
   console.error('Usage:');
-  console.error('  RENDER_API_KEY=rnd_xxx npm run repl');
+  console.error('  RENDER_API_KEY=rnd_xxx bun run repl');
   console.error('');
   console.error('Or export the variable:');
   console.error('  export RENDER_API_KEY=rnd_xxx');
-  console.error('  npm run repl');
+  console.error('  bun run repl');
   console.error('');
   process.exit(1);
 }

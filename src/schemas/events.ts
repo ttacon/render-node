@@ -4,7 +4,7 @@ import { z } from 'zod';
 // Events
 // ============================================================================
 
-export const EventSchema = z.object({
+export const RenderEventSchema = z.object({
   id: z.string(),
   type: z.string(),
   resourceId: z.string().optional(),
@@ -12,10 +12,10 @@ export const EventSchema = z.object({
   timestamp: z.string(),
   details: z.record(z.unknown()).optional(),
 });
-export type Event = z.infer<typeof EventSchema>;
+export type RenderEvent = z.infer<typeof RenderEventSchema>;
 
 export const EventWithCursorSchema = z.object({
-  event: EventSchema,
+  event: RenderEventSchema,
   cursor: z.string(),
 });
 export type EventWithCursor = z.infer<typeof EventWithCursorSchema>;

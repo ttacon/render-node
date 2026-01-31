@@ -111,7 +111,7 @@ export type {
   UpdateEnvironmentInput,
 } from './schemas/environments.js';
 // Event types
-export type { Event } from './schemas/events.js';
+export type { RenderEvent } from './schemas/events.js';
 // Header types
 export type { Header, HeaderInput, ListHeadersParams } from './schemas/headers.js';
 // Job types
