@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { RegionSchema, SuspenderTypeSchema, SuspendedStatusSchema } from './common.js';
+import { RegionSchema, SuspendedStatusSchema, SuspenderTypeSchema } from './common.js';
 import { CidrBlockAndDescriptionSchema } from './services.js';
 
 // ============================================================================
@@ -44,12 +44,7 @@ export type PostgresVersion = z.infer<typeof PostgresVersionSchema>;
 export const DatabaseRoleSchema = z.enum(['primary', 'replica']);
 export type DatabaseRole = z.infer<typeof DatabaseRoleSchema>;
 
-export const DatabaseStatusSchema = z.enum([
-  'creating',
-  'available',
-  'unavailable',
-  'suspended',
-]);
+export const DatabaseStatusSchema = z.enum(['creating', 'available', 'unavailable', 'suspended']);
 export type DatabaseStatus = z.infer<typeof DatabaseStatusSchema>;
 
 // ============================================================================

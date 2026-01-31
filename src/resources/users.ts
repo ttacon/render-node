@@ -1,5 +1,5 @@
+import { type User, UserSchema } from '../schemas/users.js';
 import { BaseResource } from './base.js';
-import { UserSchema, type User } from '../schemas/users.js';
 
 /**
  * Users resource client

@@ -1,24 +1,24 @@
 import { HttpClient, type HttpClientOptions } from './http.js';
-import { ServicesResource } from './resources/services.js';
-import { PostgresResource } from './resources/postgres.js';
-import { KeyValueResource } from './resources/keyValue.js';
-import { RedisResource } from './resources/redis.js';
+import { AuditLogsResource } from './resources/auditLogs.js';
+import { BlueprintsResource } from './resources/blueprints.js';
+import { CronJobsResource } from './resources/cronJobs.js';
 import { DisksResource } from './resources/disks.js';
 import { EnvGroupsResource } from './resources/envGroups.js';
-import { ProjectsResource } from './resources/projects.js';
 import { EnvironmentsResource } from './resources/environments.js';
-import { BlueprintsResource } from './resources/blueprints.js';
+import { EventsResource } from './resources/events.js';
+import { KeyValueResource } from './resources/keyValue.js';
+import { LogsResource } from './resources/logs.js';
+import { MaintenanceResource } from './resources/maintenance.js';
+import { MetricsResource } from './resources/metrics.js';
+import { NotificationSettingsResource } from './resources/notificationSettings.js';
+import { PostgresResource } from './resources/postgres.js';
+import { ProjectsResource } from './resources/projects.js';
+import { RedisResource } from './resources/redis.js';
 import { RegistryCredentialsResource } from './resources/registryCredentials.js';
+import { ServicesResource } from './resources/services.js';
+import { UsersResource } from './resources/users.js';
 import { WebhooksResource } from './resources/webhooks.js';
 import { WorkspacesResource } from './resources/workspaces.js';
-import { UsersResource } from './resources/users.js';
-import { LogsResource } from './resources/logs.js';
-import { MetricsResource } from './resources/metrics.js';
-import { MaintenanceResource } from './resources/maintenance.js';
-import { NotificationSettingsResource } from './resources/notificationSettings.js';
-import { AuditLogsResource } from './resources/auditLogs.js';
-import { EventsResource } from './resources/events.js';
-import { CronJobsResource } from './resources/cronJobs.js';
 
 /**
  * Options for creating a RenderClient

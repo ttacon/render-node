@@ -1,5 +1,5 @@
+import { type Event, EventSchema } from '../schemas/events.js';
 import { BaseResource } from './base.js';
-import { EventSchema, type Event } from '../schemas/events.js';
 
 /**
  * Events resource client

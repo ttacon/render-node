@@ -2,8 +2,8 @@ import {
   createApiError,
   type RenderErrorResponse,
   RenderNetworkError,
-  RenderTimeoutError,
   RenderRateLimitError,
+  RenderTimeoutError,
 } from './errors.js';
 
 const DEFAULT_BASE_URL = 'https://api.render.com/v1';
@@ -197,7 +197,7 @@ export class HttpClient {
         if (error instanceof Error && error.name === 'AbortError') {
           lastError = new RenderTimeoutError(
             `Request timed out after ${requestTimeout}ms`,
-            requestTimeout
+            requestTimeout,
           );
 
           // Don't retry timeouts
@@ -235,7 +235,7 @@ export class HttpClient {
    */
   async get<T>(
     path: string,
-    query?: Record<string, string | number | boolean | undefined>
+    query?: Record<string, string | number | boolean | undefined>,
   ): Promise<HttpResponse<T>> {
     return this.request<T>({ method: 'GET', path, query });
   }

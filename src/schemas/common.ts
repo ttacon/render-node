@@ -4,13 +4,7 @@ import { z } from 'zod';
 // Enums
 // ============================================================================
 
-export const RegionSchema = z.enum([
-  'frankfurt',
-  'oregon',
-  'ohio',
-  'singapore',
-  'virginia',
-]);
+export const RegionSchema = z.enum(['frankfurt', 'oregon', 'ohio', 'singapore', 'virginia']);
 export type Region = z.infer<typeof RegionSchema>;
 
 export const PlanSchema = z.enum([
@@ -211,7 +205,7 @@ export type RegistryCredentialSummary = z.infer<typeof RegistryCredentialSummary
  */
 export function cursorWrapped<T extends z.ZodTypeAny>(
   itemSchema: T,
-  itemKey: string
+  itemKey: string,
 ): z.ZodObject<{
   cursor: z.ZodString;
   [key: string]: T | z.ZodString;

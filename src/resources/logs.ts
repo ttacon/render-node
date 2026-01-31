@@ -1,5 +1,5 @@
+import { type ListLogsParams, type LogEntry, LogEntrySchema } from '../schemas/logs.js';
 import { BaseResource } from './base.js';
-import { LogEntrySchema, type LogEntry, type ListLogsParams } from '../schemas/logs.js';
 
 /**
  * Logs resource client

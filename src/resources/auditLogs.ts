@@ -1,15 +1,15 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  AuditLogWithCursorSchema,
   type AuditLog,
   type AuditLogWithCursor,
+  AuditLogWithCursorSchema,
   type ListAuditLogsParams,
 } from '../schemas/auditLogs.js';
+import { BaseResource } from './base.js';
 
 function buildQuery(
-  params?: ListAuditLogsParams
+  params?: ListAuditLogsParams,
 ): Record<string, string | number | boolean | undefined> {
   if (!params) return {};
   const query: Record<string, string | number | boolean | undefined> = {};
@@ -30,11 +30,11 @@ function buildQuery(
 export class AuditLogsResource extends BaseResource {
   async listForOwner(
     ownerId: string,
-    params?: ListAuditLogsParams
+    params?: ListAuditLogsParams,
   ): Promise<PaginatedResponse<AuditLog>> {
     const response = await this.http.get<AuditLogWithCursor[]>(
       `/owners/${ownerId}/audit-logs`,
-      buildQuery(params)
+      buildQuery(params),
     );
     const validated = this.validateArray(AuditLogWithCursorSchema, response.data);
 
@@ -48,7 +48,7 @@ export class AuditLogsResource extends BaseResource {
 
   async *listAllForOwner(
     ownerId: string,
-    params?: ListAuditLogsParams & AutoPaginateOptions
+    params?: ListAuditLogsParams & AutoPaginateOptions,
   ): AsyncGenerator<AuditLog, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -57,7 +57,7 @@ export class AuditLogsResource extends BaseResource {
     while (true) {
       const response = await this.http.get<AuditLogWithCursor[]>(
         `/owners/${ownerId}/audit-logs`,
-        buildQuery({ ...restParams, cursor, limit })
+        buildQuery({ ...restParams, cursor, limit }),
       );
       const validated = this.validateArray(AuditLogWithCursorSchema, response.data);
 
@@ -76,11 +76,11 @@ export class AuditLogsResource extends BaseResource {
 
   async listForOrganization(
     orgId: string,
-    params?: ListAuditLogsParams
+    params?: ListAuditLogsParams,
   ): Promise<PaginatedResponse<AuditLog>> {
     const response = await this.http.get<AuditLogWithCursor[]>(
       `/organizations/${orgId}/audit-logs`,
-      buildQuery(params)
+      buildQuery(params),
     );
     const validated = this.validateArray(AuditLogWithCursorSchema, response.data);
 
@@ -94,7 +94,7 @@ export class AuditLogsResource extends BaseResource {
 
   async *listAllForOrganization(
     orgId: string,
-    params?: ListAuditLogsParams & AutoPaginateOptions
+    params?: ListAuditLogsParams & AutoPaginateOptions,
   ): AsyncGenerator<AuditLog, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -103,7 +103,7 @@ export class AuditLogsResource extends BaseResource {
     while (true) {
       const response = await this.http.get<AuditLogWithCursor[]>(
         `/organizations/${orgId}/audit-logs`,
-        buildQuery({ ...restParams, cursor, limit })
+        buildQuery({ ...restParams, cursor, limit }),
       );
       const validated = this.validateArray(AuditLogWithCursorSchema, response.data);
 

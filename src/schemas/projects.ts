@@ -31,7 +31,7 @@ export const CreateProjectInputSchema = z.object({
       z.object({
         name: z.string(),
         protectedStatus: z.enum(['protected', 'not_protected']).optional(),
-      })
+      }),
     )
     .optional(),
 });

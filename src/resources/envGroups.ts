@@ -1,18 +1,18 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
+import { type EnvVar, EnvVarSchema, type SecretFile, SecretFileSchema } from '../schemas/common.js';
 import {
-  EnvGroupSchema,
-  EnvGroupWithCursorSchema,
-  CreateEnvGroupInputSchema,
-  UpdateEnvGroupInputSchema,
-  type EnvGroup,
-  type EnvGroupWithCursor,
   type CreateEnvGroupInput,
-  type UpdateEnvGroupInput,
+  CreateEnvGroupInputSchema,
+  type EnvGroup,
+  EnvGroupSchema,
+  type EnvGroupWithCursor,
+  EnvGroupWithCursorSchema,
   type ListEnvGroupsParams,
+  type UpdateEnvGroupInput,
+  UpdateEnvGroupInputSchema,
 } from '../schemas/envGroups.js';
-import { EnvVarSchema, SecretFileSchema, type EnvVar, type SecretFile } from '../schemas/common.js';
+import { BaseResource } from './base.js';
 
 /**
  * Environment Groups resource client
@@ -47,7 +47,7 @@ export class EnvGroupsResource extends BaseResource {
    * Async generator that automatically fetches all environment groups
    */
   async *listAll(
-    params?: ListEnvGroupsParams & AutoPaginateOptions
+    params?: ListEnvGroupsParams & AutoPaginateOptions,
   ): AsyncGenerator<EnvGroup, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -157,7 +157,7 @@ export class EnvGroupsResource extends BaseResource {
    */
   async retrieveSecretFile(envGroupId: string, name: string): Promise<SecretFile> {
     const response = await this.http.get<SecretFile>(
-      `/env-groups/${envGroupId}/secret-files/${name}`
+      `/env-groups/${envGroupId}/secret-files/${name}`,
     );
     return this.validate(SecretFileSchema, response.data);
   }
@@ -168,7 +168,7 @@ export class EnvGroupsResource extends BaseResource {
   async updateSecretFile(envGroupId: string, name: string, content: string): Promise<SecretFile> {
     const response = await this.http.put<SecretFile>(
       `/env-groups/${envGroupId}/secret-files/${name}`,
-      { content }
+      { content },
     );
     return this.validate(SecretFileSchema, response.data);
   }

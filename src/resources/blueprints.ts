@@ -1,19 +1,19 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  BlueprintSchema,
-  BlueprintWithCursorSchema,
-  UpdateBlueprintInputSchema,
-  BlueprintSyncWithCursorSchema,
   type Blueprint,
-  type BlueprintWithCursor,
-  type UpdateBlueprintInput,
+  BlueprintSchema,
   type BlueprintSync,
   type BlueprintSyncWithCursor,
-  type ListBlueprintsParams,
+  BlueprintSyncWithCursorSchema,
+  type BlueprintWithCursor,
+  BlueprintWithCursorSchema,
   type ListBlueprintSyncsParams,
+  type ListBlueprintsParams,
+  type UpdateBlueprintInput,
+  UpdateBlueprintInputSchema,
 } from '../schemas/blueprints.js';
+import { BaseResource } from './base.js';
 
 /**
  * Blueprints resource client
@@ -39,7 +39,7 @@ export class BlueprintsResource extends BaseResource {
   }
 
   async *listAll(
-    params?: ListBlueprintsParams & AutoPaginateOptions
+    params?: ListBlueprintsParams & AutoPaginateOptions,
   ): AsyncGenerator<Blueprint, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -88,7 +88,7 @@ export class BlueprintsResource extends BaseResource {
 
   async listSyncs(
     blueprintId: string,
-    params?: ListBlueprintSyncsParams
+    params?: ListBlueprintSyncsParams,
   ): Promise<PaginatedResponse<BlueprintSync>> {
     const query: Record<string, string | number | boolean | undefined> = {};
     if (params?.cursor) query.cursor = params.cursor;
@@ -96,7 +96,7 @@ export class BlueprintsResource extends BaseResource {
 
     const response = await this.http.get<BlueprintSyncWithCursor[]>(
       `/blueprints/${blueprintId}/syncs`,
-      query
+      query,
     );
     const validated = this.validateArray(BlueprintSyncWithCursorSchema, response.data);
 

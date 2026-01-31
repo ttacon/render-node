@@ -1,35 +1,35 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  PostgresSchema,
-  PostgresWithCursorSchema,
-  PostgresConnectionInfoSchema,
-  CreatePostgresInputSchema,
-  UpdatePostgresInputSchema,
-  PostgresUserSchema,
-  CreatePostgresUserInputSchema,
-  PostgresRecoveryInfoSchema,
-  RecoverPostgresInputSchema,
-  PostgresExportSchema,
-  type Postgres,
-  type PostgresWithCursor,
-  type PostgresConnectionInfo,
   type CreatePostgresInput,
-  type UpdatePostgresInput,
-  type PostgresUser,
+  CreatePostgresInputSchema,
   type CreatePostgresUserInput,
-  type PostgresRecoveryInfo,
-  type RecoverPostgresInput,
-  type PostgresExport,
+  CreatePostgresUserInputSchema,
   type ListPostgresParams,
+  type Postgres,
+  type PostgresConnectionInfo,
+  PostgresConnectionInfoSchema,
+  type PostgresExport,
+  PostgresExportSchema,
+  type PostgresRecoveryInfo,
+  PostgresRecoveryInfoSchema,
+  PostgresSchema,
+  type PostgresUser,
+  PostgresUserSchema,
+  type PostgresWithCursor,
+  PostgresWithCursorSchema,
+  type RecoverPostgresInput,
+  RecoverPostgresInputSchema,
+  type UpdatePostgresInput,
+  UpdatePostgresInputSchema,
 } from '../schemas/postgres.js';
+import { BaseResource } from './base.js';
 
 /**
  * Build query parameters for list postgres endpoint
  */
 function buildListQuery(
-  params?: ListPostgresParams
+  params?: ListPostgresParams,
 ): Record<string, string | number | boolean | undefined> {
   if (!params) return {};
 
@@ -84,7 +84,7 @@ export class PostgresResource extends BaseResource {
    * Async generator that automatically fetches all Postgres databases
    */
   async *listAll(
-    params?: ListPostgresParams & AutoPaginateOptions
+    params?: ListPostgresParams & AutoPaginateOptions,
   ): AsyncGenerator<Postgres, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -169,7 +169,7 @@ export class PostgresResource extends BaseResource {
    */
   async connectionInfo(postgresId: string): Promise<PostgresConnectionInfo> {
     const response = await this.http.get<PostgresConnectionInfo>(
-      `/postgres/${postgresId}/connection-info`
+      `/postgres/${postgresId}/connection-info`,
     );
     return this.validate(PostgresConnectionInfoSchema, response.data);
   }
@@ -219,9 +219,7 @@ export class PostgresResource extends BaseResource {
    * @returns Recovery information including latest recovery time
    */
   async recoveryInfo(postgresId: string): Promise<PostgresRecoveryInfo> {
-    const response = await this.http.get<PostgresRecoveryInfo>(
-      `/postgres/${postgresId}/recovery`
-    );
+    const response = await this.http.get<PostgresRecoveryInfo>(`/postgres/${postgresId}/recovery`);
     return this.validate(PostgresRecoveryInfoSchema, response.data);
   }
 
@@ -260,7 +258,7 @@ export class PostgresResource extends BaseResource {
     const validated = this.validate(CreatePostgresUserInputSchema, input);
     const response = await this.http.post<PostgresUser>(
       `/postgres/${postgresId}/credentials`,
-      validated
+      validated,
     );
     return this.validate(PostgresUserSchema, response.data);
   }

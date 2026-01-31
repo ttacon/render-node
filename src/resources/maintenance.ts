@@ -1,15 +1,15 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse } from '../pagination.js';
+import type { CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse } from '../pagination.js';
 import {
-  MaintenanceRunSchema,
-  MaintenanceRunWithCursorSchema,
-  UpdateMaintenanceInputSchema,
-  type MaintenanceRun,
-  type MaintenanceRunWithCursor,
-  type UpdateMaintenanceInput,
   type ListMaintenanceParams,
+  type MaintenanceRun,
+  MaintenanceRunSchema,
+  type MaintenanceRunWithCursor,
+  MaintenanceRunWithCursorSchema,
+  type UpdateMaintenanceInput,
+  UpdateMaintenanceInputSchema,
 } from '../schemas/maintenance.js';
+import { BaseResource } from './base.js';
 
 /**
  * Maintenance resource client
@@ -42,14 +42,14 @@ export class MaintenanceResource extends BaseResource {
     const validated = this.validate(UpdateMaintenanceInputSchema, input);
     const response = await this.http.patch<MaintenanceRun>(
       `/maintenance/${maintenanceRunId}`,
-      validated
+      validated,
     );
     return this.validate(MaintenanceRunSchema, response.data);
   }
 
   async trigger(maintenanceRunId: string): Promise<MaintenanceRun> {
     const response = await this.http.post<MaintenanceRun>(
-      `/maintenance/${maintenanceRunId}/trigger`
+      `/maintenance/${maintenanceRunId}/trigger`,
     );
     return this.validate(MaintenanceRunSchema, response.data);
   }

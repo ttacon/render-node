@@ -1,23 +1,23 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  RouteSchema,
-  RouteWithCursorSchema,
-  RouteInputSchema,
-  RoutePatchInputSchema,
-  type Route,
-  type RouteWithCursor,
-  type RouteInput,
-  type RoutePatchInput,
   type ListRoutesParams,
+  type Route,
+  type RouteInput,
+  RouteInputSchema,
+  type RoutePatchInput,
+  RoutePatchInputSchema,
+  RouteSchema,
+  type RouteWithCursor,
+  RouteWithCursorSchema,
 } from '../schemas/routes.js';
+import { BaseResource } from './base.js';
 
 /**
  * Build query parameters for list routes endpoint
  */
 function buildListQuery(
-  params?: ListRoutesParams
+  params?: ListRoutesParams,
 ): Record<string, string | number | boolean | undefined> {
   if (!params) return {};
 
@@ -47,10 +47,7 @@ export class RoutesResource extends BaseResource {
    */
   async list(serviceId: string, params?: ListRoutesParams): Promise<PaginatedResponse<Route>> {
     const query = buildListQuery(params);
-    const response = await this.http.get<RouteWithCursor[]>(
-      `/services/${serviceId}/routes`,
-      query
-    );
+    const response = await this.http.get<RouteWithCursor[]>(`/services/${serviceId}/routes`, query);
 
     const validated = this.validateArray(RouteWithCursorSchema, response.data);
 
@@ -67,7 +64,7 @@ export class RoutesResource extends BaseResource {
    */
   async *listAll(
     serviceId: string,
-    params?: ListRoutesParams & AutoPaginateOptions
+    params?: ListRoutesParams & AutoPaginateOptions,
   ): AsyncGenerator<Route, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -77,7 +74,7 @@ export class RoutesResource extends BaseResource {
       const query = buildListQuery({ ...restParams, cursor, limit });
       const response = await this.http.get<RouteWithCursor[]>(
         `/services/${serviceId}/routes`,
-        query
+        query,
       );
       const validated = this.validateArray(RouteWithCursorSchema, response.data);
 
@@ -126,7 +123,7 @@ export class RoutesResource extends BaseResource {
     const validated = this.validateArray(RouteInputSchema, routes);
     const response = await this.http.put<RouteWithCursor[]>(
       `/services/${serviceId}/routes`,
-      validated
+      validated,
     );
     return this.validateArray(RouteWithCursorSchema, response.data).map((v) => v.route);
   }
@@ -142,7 +139,7 @@ export class RoutesResource extends BaseResource {
     const validated = this.validateArray(RoutePatchInputSchema, routes);
     const response = await this.http.patch<RouteWithCursor[]>(
       `/services/${serviceId}/routes`,
-      validated
+      validated,
     );
     return this.validateArray(RouteWithCursorSchema, response.data).map((v) => v.route);
   }

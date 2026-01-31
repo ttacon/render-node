@@ -1,25 +1,25 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  KeyValueSchema,
-  KeyValueWithCursorSchema,
-  KeyValueConnectionInfoSchema,
-  CreateKeyValueInputSchema,
-  UpdateKeyValueInputSchema,
-  type KeyValue,
-  type KeyValueWithCursor,
-  type KeyValueConnectionInfo,
   type CreateKeyValueInput,
-  type UpdateKeyValueInput,
+  CreateKeyValueInputSchema,
+  type KeyValue,
+  type KeyValueConnectionInfo,
+  KeyValueConnectionInfoSchema,
+  KeyValueSchema,
+  type KeyValueWithCursor,
+  KeyValueWithCursorSchema,
   type ListKeyValueParams,
+  type UpdateKeyValueInput,
+  UpdateKeyValueInputSchema,
 } from '../schemas/keyValue.js';
+import { BaseResource } from './base.js';
 
 /**
  * Build query parameters for list key-value endpoint
  */
 function buildListQuery(
-  params?: ListKeyValueParams
+  params?: ListKeyValueParams,
 ): Record<string, string | number | boolean | undefined> {
   if (!params) return {};
 
@@ -70,7 +70,7 @@ export class KeyValueResource extends BaseResource {
    * Async generator that automatically fetches all Key Value instances
    */
   async *listAll(
-    params?: ListKeyValueParams & AutoPaginateOptions
+    params?: ListKeyValueParams & AutoPaginateOptions,
   ): AsyncGenerator<KeyValue, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -140,7 +140,7 @@ export class KeyValueResource extends BaseResource {
    */
   async connectionInfo(keyValueId: string): Promise<KeyValueConnectionInfo> {
     const response = await this.http.get<KeyValueConnectionInfo>(
-      `/key-value/${keyValueId}/connection-info`
+      `/key-value/${keyValueId}/connection-info`,
     );
     return this.validate(KeyValueConnectionInfoSchema, response.data);
   }

@@ -1,24 +1,24 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  RegistryCredentialFullSchema,
-  RegistryCredentialWithCursorSchema,
-  CreateRegistryCredentialInputSchema,
-  UpdateRegistryCredentialInputSchema,
-  type RegistryCredentialFull,
-  type RegistryCredentialWithCursor,
   type CreateRegistryCredentialInput,
-  type UpdateRegistryCredentialInput,
+  CreateRegistryCredentialInputSchema,
   type ListRegistryCredentialsParams,
+  type RegistryCredentialFull,
+  RegistryCredentialFullSchema,
+  type RegistryCredentialWithCursor,
+  RegistryCredentialWithCursorSchema,
+  type UpdateRegistryCredentialInput,
+  UpdateRegistryCredentialInputSchema,
 } from '../schemas/registryCredentials.js';
+import { BaseResource } from './base.js';
 
 /**
  * Registry Credentials resource client
  */
 export class RegistryCredentialsResource extends BaseResource {
   async list(
-    params?: ListRegistryCredentialsParams
+    params?: ListRegistryCredentialsParams,
   ): Promise<PaginatedResponse<RegistryCredentialFull>> {
     const query: Record<string, string | number | boolean | undefined> = {};
     if (params?.ownerId) {
@@ -29,7 +29,7 @@ export class RegistryCredentialsResource extends BaseResource {
 
     const response = await this.http.get<RegistryCredentialWithCursor[]>(
       '/registrycredentials',
-      query
+      query,
     );
     const validated = this.validateArray(RegistryCredentialWithCursorSchema, response.data);
 
@@ -42,7 +42,7 @@ export class RegistryCredentialsResource extends BaseResource {
   }
 
   async *listAll(
-    params?: ListRegistryCredentialsParams & AutoPaginateOptions
+    params?: ListRegistryCredentialsParams & AutoPaginateOptions,
   ): AsyncGenerator<RegistryCredentialFull, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -60,7 +60,7 @@ export class RegistryCredentialsResource extends BaseResource {
 
       const response = await this.http.get<RegistryCredentialWithCursor[]>(
         '/registrycredentials',
-        query
+        query,
       );
       const validated = this.validateArray(RegistryCredentialWithCursorSchema, response.data);
 
@@ -73,7 +73,7 @@ export class RegistryCredentialsResource extends BaseResource {
       }
 
       cursor = extractCursor(
-        validated.map((v) => ({ cursor: v.cursor, item: v.registryCredential }))
+        validated.map((v) => ({ cursor: v.cursor, item: v.registryCredential })),
       );
       if (!cursor) break;
     }
@@ -83,26 +83,26 @@ export class RegistryCredentialsResource extends BaseResource {
     const validated = this.validate(CreateRegistryCredentialInputSchema, input);
     const response = await this.http.post<RegistryCredentialFull>(
       '/registrycredentials',
-      validated
+      validated,
     );
     return this.validate(RegistryCredentialFullSchema, response.data);
   }
 
   async retrieve(credentialId: string): Promise<RegistryCredentialFull> {
     const response = await this.http.get<RegistryCredentialFull>(
-      `/registrycredentials/${credentialId}`
+      `/registrycredentials/${credentialId}`,
     );
     return this.validate(RegistryCredentialFullSchema, response.data);
   }
 
   async update(
     credentialId: string,
-    input: UpdateRegistryCredentialInput
+    input: UpdateRegistryCredentialInput,
   ): Promise<RegistryCredentialFull> {
     const validated = this.validate(UpdateRegistryCredentialInputSchema, input);
     const response = await this.http.patch<RegistryCredentialFull>(
       `/registrycredentials/${credentialId}`,
-      validated
+      validated,
     );
     return this.validate(RegistryCredentialFullSchema, response.data);
   }

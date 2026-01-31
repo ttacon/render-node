@@ -1,12 +1,12 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
-  RenderError,
+  createApiError,
   RenderApiError,
   RenderAuthError,
+  RenderError,
   RenderNotFoundError,
   RenderRateLimitError,
   RenderValidationError,
-  createApiError,
 } from './errors.js';
 
 describe('Errors', () => {
@@ -21,7 +21,12 @@ describe('Errors', () => {
 
   describe('RenderApiError', () => {
     it('should create an API error with status and response', () => {
-      const error = new RenderApiError('Not found', 404, { id: 'err_123', message: 'Resource not found' }, 'req_abc');
+      const error = new RenderApiError(
+        'Not found',
+        404,
+        { id: 'err_123', message: 'Resource not found' },
+        'req_abc',
+      );
       expect(error.message).toBe('Not found');
       expect(error.status).toBe(404);
       expect(error.response?.id).toBe('err_123');

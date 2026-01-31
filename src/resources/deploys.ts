@@ -1,23 +1,23 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  DeploySchema,
-  DeployWithCursorSchema,
-  CreateDeployInputSchema,
-  RollbackDeployInputSchema,
-  type Deploy,
-  type DeployWithCursor,
   type CreateDeployInput,
-  type RollbackDeployInput,
+  CreateDeployInputSchema,
+  type Deploy,
+  DeploySchema,
+  type DeployWithCursor,
+  DeployWithCursorSchema,
   type ListDeploysParams,
+  type RollbackDeployInput,
+  RollbackDeployInputSchema,
 } from '../schemas/deploys.js';
+import { BaseResource } from './base.js';
 
 /**
  * Build query parameters for list deploys endpoint
  */
 function buildListQuery(
-  params?: ListDeploysParams
+  params?: ListDeploysParams,
 ): Record<string, string | number | boolean | undefined> {
   if (!params) return {};
 
@@ -53,7 +53,7 @@ export class DeploysResource extends BaseResource {
     const query = buildListQuery(params);
     const response = await this.http.get<DeployWithCursor[]>(
       `/services/${serviceId}/deploys`,
-      query
+      query,
     );
 
     const validated = this.validateArray(DeployWithCursorSchema, response.data);
@@ -82,7 +82,7 @@ export class DeploysResource extends BaseResource {
    */
   async *listAll(
     serviceId: string,
-    params?: ListDeploysParams & AutoPaginateOptions
+    params?: ListDeploysParams & AutoPaginateOptions,
   ): AsyncGenerator<Deploy, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -92,7 +92,7 @@ export class DeploysResource extends BaseResource {
       const query = buildListQuery({ ...restParams, cursor, limit });
       const response = await this.http.get<DeployWithCursor[]>(
         `/services/${serviceId}/deploys`,
-        query
+        query,
       );
       const validated = this.validateArray(DeployWithCursorSchema, response.data);
 
@@ -109,9 +109,7 @@ export class DeploysResource extends BaseResource {
         }
       }
 
-      cursor = extractCursor(
-        validated.map((v) => ({ cursor: v.cursor, item: v.deploy }))
-      );
+      cursor = extractCursor(validated.map((v) => ({ cursor: v.cursor, item: v.deploy })));
 
       if (!cursor) {
         break;
@@ -170,7 +168,7 @@ export class DeploysResource extends BaseResource {
    */
   async cancel(serviceId: string, deployId: string): Promise<Deploy> {
     const response = await this.http.post<Deploy>(
-      `/services/${serviceId}/deploys/${deployId}/cancel`
+      `/services/${serviceId}/deploys/${deployId}/cancel`,
     );
     return this.validate(DeploySchema, response.data);
   }

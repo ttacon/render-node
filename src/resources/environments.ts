@@ -1,21 +1,21 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  EnvironmentSchema,
-  EnvironmentWithCursorSchema,
-  CreateEnvironmentInputSchema,
-  UpdateEnvironmentInputSchema,
-  AddResourcesInputSchema,
-  RemoveResourcesInputSchema,
-  type Environment,
-  type EnvironmentWithCursor,
-  type CreateEnvironmentInput,
-  type UpdateEnvironmentInput,
   type AddResourcesInput,
-  type RemoveResourcesInput,
+  AddResourcesInputSchema,
+  type CreateEnvironmentInput,
+  CreateEnvironmentInputSchema,
+  type Environment,
+  EnvironmentSchema,
+  type EnvironmentWithCursor,
+  EnvironmentWithCursorSchema,
   type ListEnvironmentsParams,
+  type RemoveResourcesInput,
+  RemoveResourcesInputSchema,
+  type UpdateEnvironmentInput,
+  UpdateEnvironmentInputSchema,
 } from '../schemas/environments.js';
+import { BaseResource } from './base.js';
 
 /**
  * Environments resource client
@@ -39,7 +39,7 @@ export class EnvironmentsResource extends BaseResource {
   }
 
   async *listAll(
-    params?: ListEnvironmentsParams & AutoPaginateOptions
+    params?: ListEnvironmentsParams & AutoPaginateOptions,
   ): AsyncGenerator<Environment, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -82,7 +82,7 @@ export class EnvironmentsResource extends BaseResource {
     const validated = this.validate(UpdateEnvironmentInputSchema, input);
     const response = await this.http.patch<Environment>(
       `/environments/${environmentId}`,
-      validated
+      validated,
     );
     return this.validate(EnvironmentSchema, response.data);
   }

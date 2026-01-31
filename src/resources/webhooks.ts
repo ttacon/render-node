@@ -1,21 +1,21 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  WebhookSchema,
-  WebhookWithCursorSchema,
-  CreateWebhookInputSchema,
-  UpdateWebhookInputSchema,
-  WebhookEventWithCursorSchema,
-  type Webhook,
-  type WebhookWithCursor,
   type CreateWebhookInput,
+  CreateWebhookInputSchema,
+  type ListWebhookEventsParams,
+  type ListWebhooksParams,
   type UpdateWebhookInput,
+  UpdateWebhookInputSchema,
+  type Webhook,
   type WebhookEvent,
   type WebhookEventWithCursor,
-  type ListWebhooksParams,
-  type ListWebhookEventsParams,
+  WebhookEventWithCursorSchema,
+  WebhookSchema,
+  type WebhookWithCursor,
+  WebhookWithCursorSchema,
 } from '../schemas/webhooks.js';
+import { BaseResource } from './base.js';
 
 /**
  * Webhooks resource client
@@ -38,7 +38,7 @@ export class WebhooksResource extends BaseResource {
   }
 
   async *listAll(
-    params?: ListWebhooksParams & AutoPaginateOptions
+    params?: ListWebhooksParams & AutoPaginateOptions,
   ): AsyncGenerator<Webhook, void, unknown> {
     const { cursor: initialCursor, limit, maxItems } = params ?? {};
     let cursor = initialCursor;
@@ -88,7 +88,7 @@ export class WebhooksResource extends BaseResource {
 
   async listEvents(
     webhookId: string,
-    params?: ListWebhookEventsParams
+    params?: ListWebhookEventsParams,
   ): Promise<PaginatedResponse<WebhookEvent>> {
     const query: Record<string, string | number | boolean | undefined> = {};
     if (params?.cursor) query.cursor = params.cursor;
@@ -96,7 +96,7 @@ export class WebhooksResource extends BaseResource {
 
     const response = await this.http.get<WebhookEventWithCursor[]>(
       `/webhooks/${webhookId}/events`,
-      query
+      query,
     );
     const validated = this.validateArray(WebhookEventWithCursorSchema, response.data);
 

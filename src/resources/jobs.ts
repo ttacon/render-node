@@ -1,21 +1,21 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  JobSchema,
-  JobWithCursorSchema,
+  type CreateJobInput,
   CreateJobInputSchema,
   type Job,
+  JobSchema,
   type JobWithCursor,
-  type CreateJobInput,
+  JobWithCursorSchema,
   type ListJobsParams,
 } from '../schemas/jobs.js';
+import { BaseResource } from './base.js';
 
 /**
  * Build query parameters for list jobs endpoint
  */
 function buildListQuery(
-  params?: ListJobsParams
+  params?: ListJobsParams,
 ): Record<string, string | number | boolean | undefined> {
   if (!params) return {};
 
@@ -66,7 +66,7 @@ export class JobsResource extends BaseResource {
    */
   async *listAll(
     serviceId: string,
-    params?: ListJobsParams & AutoPaginateOptions
+    params?: ListJobsParams & AutoPaginateOptions,
   ): AsyncGenerator<Job, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;

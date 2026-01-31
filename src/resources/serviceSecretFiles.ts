@@ -1,14 +1,14 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  SecretFileSchema,
-  SecretFileWithCursorSchema,
-  SecretFileInputSchema,
   type SecretFile,
-  type SecretFileWithCursor,
   type SecretFileInput,
+  SecretFileInputSchema,
+  SecretFileSchema,
+  type SecretFileWithCursor,
+  SecretFileWithCursorSchema,
 } from '../schemas/common.js';
+import { BaseResource } from './base.js';
 
 export interface ListSecretFilesParams {
   cursor?: string;
@@ -30,7 +30,7 @@ export class ServiceSecretFilesResource extends BaseResource {
    */
   async list(
     serviceId: string,
-    params?: ListSecretFilesParams
+    params?: ListSecretFilesParams,
   ): Promise<PaginatedResponse<SecretFile>> {
     const query: Record<string, string | number | boolean | undefined> = {};
     if (params?.cursor) query.cursor = params.cursor;
@@ -38,7 +38,7 @@ export class ServiceSecretFilesResource extends BaseResource {
 
     const response = await this.http.get<SecretFileWithCursor[]>(
       `/services/${serviceId}/secret-files`,
-      query
+      query,
     );
 
     const validated = this.validateArray(SecretFileWithCursorSchema, response.data);
@@ -56,7 +56,7 @@ export class ServiceSecretFilesResource extends BaseResource {
    */
   async *listAll(
     serviceId: string,
-    params?: ListSecretFilesParams & AutoPaginateOptions
+    params?: ListSecretFilesParams & AutoPaginateOptions,
   ): AsyncGenerator<SecretFile, void, unknown> {
     const { cursor: initialCursor, limit, maxItems } = params ?? {};
     let cursor = initialCursor;
@@ -69,7 +69,7 @@ export class ServiceSecretFilesResource extends BaseResource {
 
       const response = await this.http.get<SecretFileWithCursor[]>(
         `/services/${serviceId}/secret-files`,
-        query
+        query,
       );
       const validated = this.validateArray(SecretFileWithCursorSchema, response.data);
 
@@ -107,7 +107,7 @@ export class ServiceSecretFilesResource extends BaseResource {
     const validated = this.validateArray(SecretFileInputSchema, secretFiles);
     const response = await this.http.put<SecretFileWithCursor[]>(
       `/services/${serviceId}/secret-files`,
-      validated
+      validated,
     );
     return this.validateArray(SecretFileWithCursorSchema, response.data).map((v) => v.secretFile);
   }
@@ -120,9 +120,7 @@ export class ServiceSecretFilesResource extends BaseResource {
    * @returns The secret file metadata
    */
   async retrieve(serviceId: string, name: string): Promise<SecretFile> {
-    const response = await this.http.get<SecretFile>(
-      `/services/${serviceId}/secret-files/${name}`
-    );
+    const response = await this.http.get<SecretFile>(`/services/${serviceId}/secret-files/${name}`);
     return this.validate(SecretFileSchema, response.data);
   }
 
@@ -137,7 +135,7 @@ export class ServiceSecretFilesResource extends BaseResource {
   async set(serviceId: string, name: string, content: string): Promise<SecretFile> {
     const response = await this.http.put<SecretFile>(
       `/services/${serviceId}/secret-files/${name}`,
-      { content }
+      { content },
     );
     return this.validate(SecretFileSchema, response.data);
   }

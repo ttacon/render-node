@@ -1,19 +1,12 @@
 import { z } from 'zod';
-import { RegionSchema, SuspenderTypeSchema, SuspendedStatusSchema } from './common.js';
+import { RegionSchema, SuspendedStatusSchema, SuspenderTypeSchema } from './common.js';
 import { CidrBlockAndDescriptionSchema } from './services.js';
 
 // ============================================================================
 // Redis (Deprecated)
 // ============================================================================
 
-export const RedisPlanSchema = z.enum([
-  'free',
-  'starter',
-  'standard',
-  'pro',
-  'pro_plus',
-  'custom',
-]);
+export const RedisPlanSchema = z.enum(['free', 'starter', 'standard', 'pro', 'pro_plus', 'custom']);
 export type RedisPlan = z.infer<typeof RedisPlanSchema>;
 
 export const RedisMaxmemoryPolicySchema = z.enum([

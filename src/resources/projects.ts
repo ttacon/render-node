@@ -1,17 +1,17 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  ProjectSchema,
-  ProjectWithCursorSchema,
-  CreateProjectInputSchema,
-  UpdateProjectInputSchema,
-  type Project,
-  type ProjectWithCursor,
   type CreateProjectInput,
-  type UpdateProjectInput,
+  CreateProjectInputSchema,
   type ListProjectsParams,
+  type Project,
+  ProjectSchema,
+  type ProjectWithCursor,
+  ProjectWithCursorSchema,
+  type UpdateProjectInput,
+  UpdateProjectInputSchema,
 } from '../schemas/projects.js';
+import { BaseResource } from './base.js';
 
 /**
  * Projects resource client
@@ -38,7 +38,7 @@ export class ProjectsResource extends BaseResource {
   }
 
   async *listAll(
-    params?: ListProjectsParams & AutoPaginateOptions
+    params?: ListProjectsParams & AutoPaginateOptions,
   ): AsyncGenerator<Project, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;

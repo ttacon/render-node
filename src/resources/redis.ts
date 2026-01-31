@@ -1,19 +1,19 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  RedisSchema,
-  RedisWithCursorSchema,
-  RedisConnectionInfoSchema,
-  CreateRedisInputSchema,
-  UpdateRedisInputSchema,
-  type Redis,
-  type RedisWithCursor,
-  type RedisConnectionInfo,
   type CreateRedisInput,
-  type UpdateRedisInput,
+  CreateRedisInputSchema,
   type ListRedisParams,
+  type Redis,
+  type RedisConnectionInfo,
+  RedisConnectionInfoSchema,
+  RedisSchema,
+  type RedisWithCursor,
+  RedisWithCursorSchema,
+  type UpdateRedisInput,
+  UpdateRedisInputSchema,
 } from '../schemas/redis.js';
+import { BaseResource } from './base.js';
 
 /**
  * Redis resource client
@@ -46,7 +46,7 @@ export class RedisResource extends BaseResource {
   }
 
   async *listAll(
-    params?: ListRedisParams & AutoPaginateOptions
+    params?: ListRedisParams & AutoPaginateOptions,
   ): AsyncGenerator<Redis, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;

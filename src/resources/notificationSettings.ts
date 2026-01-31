@@ -1,18 +1,18 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse } from '../pagination.js';
+import type { CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse } from '../pagination.js';
 import {
-  NotificationSettingsSchema,
-  NotificationOverrideSchema,
-  NotificationOverrideWithCursorSchema,
-  UpdateNotificationSettingsInputSchema,
-  UpdateNotificationOverrideInputSchema,
-  type NotificationSettings,
   type NotificationOverride,
+  NotificationOverrideSchema,
   type NotificationOverrideWithCursor,
-  type UpdateNotificationSettingsInput,
+  NotificationOverrideWithCursorSchema,
+  type NotificationSettings,
+  NotificationSettingsSchema,
   type UpdateNotificationOverrideInput,
+  UpdateNotificationOverrideInputSchema,
+  type UpdateNotificationSettingsInput,
+  UpdateNotificationSettingsInputSchema,
 } from '../schemas/notificationSettings.js';
+import { BaseResource } from './base.js';
 
 /**
  * Notification Settings resource client
@@ -20,19 +20,19 @@ import {
 export class NotificationSettingsResource extends BaseResource {
   async retrieve(ownerId: string): Promise<NotificationSettings> {
     const response = await this.http.get<NotificationSettings>(
-      `/notification-settings/owners/${ownerId}`
+      `/notification-settings/owners/${ownerId}`,
     );
     return this.validate(NotificationSettingsSchema, response.data);
   }
 
   async update(
     ownerId: string,
-    input: UpdateNotificationSettingsInput
+    input: UpdateNotificationSettingsInput,
   ): Promise<NotificationSettings> {
     const validated = this.validate(UpdateNotificationSettingsInputSchema, input);
     const response = await this.http.patch<NotificationSettings>(
       `/notification-settings/owners/${ownerId}`,
-      validated
+      validated,
     );
     return this.validate(NotificationSettingsSchema, response.data);
   }
@@ -47,7 +47,7 @@ export class NotificationSettingsResource extends BaseResource {
 
     const response = await this.http.get<NotificationOverrideWithCursor[]>(
       '/notification-settings/overrides',
-      query
+      query,
     );
     const validated = this.validateArray(NotificationOverrideWithCursorSchema, response.data);
 
@@ -61,19 +61,19 @@ export class NotificationSettingsResource extends BaseResource {
 
   async retrieveServiceOverride(serviceId: string): Promise<NotificationOverride> {
     const response = await this.http.get<NotificationOverride>(
-      `/notification-settings/overrides/services/${serviceId}`
+      `/notification-settings/overrides/services/${serviceId}`,
     );
     return this.validate(NotificationOverrideSchema, response.data);
   }
 
   async updateServiceOverride(
     serviceId: string,
-    input: UpdateNotificationOverrideInput
+    input: UpdateNotificationOverrideInput,
   ): Promise<NotificationOverride> {
     const validated = this.validate(UpdateNotificationOverrideInputSchema, input);
     const response = await this.http.patch<NotificationOverride>(
       `/notification-settings/overrides/services/${serviceId}`,
-      validated
+      validated,
     );
     return this.validate(NotificationOverrideSchema, response.data);
   }

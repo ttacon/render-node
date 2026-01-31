@@ -26,12 +26,7 @@ export class RenderApiError extends RenderError {
   public readonly response?: RenderErrorResponse;
   public readonly requestId?: string;
 
-  constructor(
-    message: string,
-    status: number,
-    response?: RenderErrorResponse,
-    requestId?: string
-  ) {
+  constructor(message: string, status: number, response?: RenderErrorResponse, requestId?: string) {
     super(message);
     this.name = 'RenderApiError';
     this.status = status;
@@ -130,7 +125,7 @@ export class RenderRateLimitError extends RenderApiError {
     message: string,
     response?: RenderErrorResponse,
     requestId?: string,
-    retryAfter?: number
+    retryAfter?: number,
   ) {
     super(message, 429, response, requestId);
     this.name = 'RenderRateLimitError';
@@ -205,7 +200,7 @@ export function createApiError(
   message: string,
   response?: RenderErrorResponse,
   requestId?: string,
-  retryAfter?: number
+  retryAfter?: number,
 ): RenderApiError {
   switch (status) {
     case 400:

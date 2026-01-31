@@ -3,253 +3,229 @@ export { RenderClient, type RenderClientOptions } from './client.js';
 
 // Errors
 export {
-  RenderError,
   RenderApiError,
-  RenderBadRequestError,
   RenderAuthError,
-  RenderPaymentRequiredError,
-  RenderForbiddenError,
-  RenderNotFoundError,
-  RenderNotAcceptableError,
+  RenderBadRequestError,
   RenderConflictError,
+  RenderError,
+  type RenderErrorResponse,
+  RenderForbiddenError,
   RenderGoneError,
+  RenderNetworkError,
+  RenderNotAcceptableError,
+  RenderNotFoundError,
+  RenderPaymentRequiredError,
   RenderRateLimitError,
   RenderServerError,
   RenderServiceUnavailableError,
-  RenderNetworkError,
   RenderTimeoutError,
   RenderValidationError,
-  type RenderErrorResponse,
 } from './errors.js';
 
 // Pagination
 export type {
-  PaginationParams,
+  AutoPaginateOptions,
   CursorResponse,
   PaginatedResponse,
-  AutoPaginateOptions,
+  PaginationParams,
 } from './pagination.js';
-
-// Common schemas and types
-export {
-  RegionSchema,
-  PlanSchema,
-  PaidPlanSchema,
-  BuildPlanSchema,
-  ServiceTypeSchema,
-  ServiceRuntimeSchema,
-  AutoDeploySchema,
-  NotifySettingSchema,
-  SuspenderTypeSchema,
-  SuspendedStatusSchema,
-  ProtectedStatusSchema,
-  DeployStatusSchema,
-  DeployTriggerSchema,
-  type Region,
-  type Plan,
-  type PaidPlan,
-  type BuildPlan,
-  type ServiceType,
-  type ServiceRuntime,
-  type AutoDeploy,
-  type NotifySetting,
-  type SuspenderType,
-  type SuspendedStatus,
-  type ProtectedStatus,
-  type DeployStatus,
-  type DeployTrigger,
-  type EnvVar,
-  type EnvVarInput,
-  type SecretFile,
-  type SecretFileInput,
-} from './schemas/common.js';
-
-// Service types
-export type {
-  Service,
-  ServiceAndDeploy,
-  CreateServiceInput,
-  UpdateServiceInput,
-  ListServicesParams,
-  ScaleServiceInput,
-  AutoscalingInput,
-  ServiceInstance,
-  PreviewServiceInput,
-  WebServiceDetails,
-  PrivateServiceDetails,
-  BackgroundWorkerDetails,
-  StaticSiteDetails,
-  CronJobDetails,
-} from './schemas/services.js';
-
-// Deploy types
-export type {
-  Deploy,
-  CreateDeployInput,
-  RollbackDeployInput,
-  ListDeploysParams,
-} from './schemas/deploys.js';
-
-// Custom Domain types
-export type {
-  CustomDomain,
-  CreateCustomDomainInput,
-  ListCustomDomainsParams,
-} from './schemas/customDomains.js';
-
-// Header types
-export type { Header, HeaderInput, ListHeadersParams } from './schemas/headers.js';
-
-// Route types
-export type { Route, RouteInput, RoutePatchInput, ListRoutesParams } from './schemas/routes.js';
-
-// Job types
-export type { Job, CreateJobInput, ListJobsParams } from './schemas/jobs.js';
-
-// Postgres types
-export {
-  PostgresPlanSchema,
-  PostgresVersionSchema,
-  type Postgres,
-  type PostgresConnectionInfo,
-  type CreatePostgresInput,
-  type UpdatePostgresInput,
-  type PostgresUser,
-  type CreatePostgresUserInput,
-  type PostgresRecoveryInfo,
-  type RecoverPostgresInput,
-  type PostgresExport,
-  type ListPostgresParams,
-  type PostgresPlan,
-  type PostgresVersion,
-} from './schemas/postgres.js';
-
-// Key Value types
-export {
-  KeyValuePlanSchema,
-  type KeyValue,
-  type KeyValueConnectionInfo,
-  type CreateKeyValueInput,
-  type UpdateKeyValueInput,
-  type ListKeyValueParams,
-  type KeyValuePlan,
-} from './schemas/keyValue.js';
-
-// Redis types (deprecated)
-export type {
-  Redis,
-  RedisConnectionInfo,
-  CreateRedisInput,
-  UpdateRedisInput,
-  ListRedisParams,
-} from './schemas/redis.js';
-
-// Disk types
-export type {
-  Disk,
-  CreateDiskInput,
-  UpdateDiskInput,
-  DiskSnapshot,
-  RestoreSnapshotInput,
-  ListDisksParams,
-} from './schemas/disks.js';
-
-// Environment Group types
-export type {
-  EnvGroup,
-  CreateEnvGroupInput,
-  UpdateEnvGroupInput,
-  ListEnvGroupsParams,
-} from './schemas/envGroups.js';
-
-// Project types
-export type {
-  Project,
-  CreateProjectInput,
-  UpdateProjectInput,
-  ListProjectsParams,
-} from './schemas/projects.js';
-
-// Environment types
-export type {
-  Environment,
-  CreateEnvironmentInput,
-  UpdateEnvironmentInput,
-  AddResourcesInput,
-  RemoveResourcesInput,
-  ListEnvironmentsParams,
-} from './schemas/environments.js';
-
+// Audit Log types
+export type { AuditLog, ListAuditLogsParams } from './schemas/auditLogs.js';
 // Blueprint types
 export type {
   Blueprint,
   BlueprintSync,
-  UpdateBlueprintInput,
   ListBlueprintsParams,
+  UpdateBlueprintInput,
 } from './schemas/blueprints.js';
-
-// Registry Credential types
+// Common schemas and types
 export {
-  RegistryTypeSchema,
-  type RegistryCredentialFull,
-  type CreateRegistryCredentialInput,
-  type UpdateRegistryCredentialInput,
-  type ListRegistryCredentialsParams,
-  type RegistryType,
-} from './schemas/registryCredentials.js';
+  type AutoDeploy,
+  AutoDeploySchema,
+  type BuildPlan,
+  BuildPlanSchema,
+  type DeployStatus,
+  DeployStatusSchema,
+  type DeployTrigger,
+  DeployTriggerSchema,
+  type EnvVar,
+  type EnvVarInput,
+  type NotifySetting,
+  NotifySettingSchema,
+  type PaidPlan,
+  PaidPlanSchema,
+  type Plan,
+  PlanSchema,
+  type ProtectedStatus,
+  ProtectedStatusSchema,
+  type Region,
+  RegionSchema,
+  type SecretFile,
+  type SecretFileInput,
+  type ServiceRuntime,
+  ServiceRuntimeSchema,
+  type ServiceType,
+  ServiceTypeSchema,
+  type SuspendedStatus,
+  SuspendedStatusSchema,
+  type SuspenderType,
+  SuspenderTypeSchema,
+} from './schemas/common.js';
 
-// Webhook types
+// Custom Domain types
 export type {
-  Webhook,
-  WebhookEvent,
-  CreateWebhookInput,
-  UpdateWebhookInput,
-  ListWebhooksParams,
-} from './schemas/webhooks.js';
-
-// Workspace types
-export {
-  TeamMemberRoleSchema,
-  type Workspace,
-  type TeamMember,
-  type UpdateTeamMemberInput,
-  type ListWorkspacesParams,
-  type TeamMemberRole,
-} from './schemas/workspaces.js';
-
-// User types
-export type { User } from './schemas/users.js';
-
-// Log types
-export type { LogEntry, ListLogsParams } from './schemas/logs.js';
-
-// Metric types
+  CreateCustomDomainInput,
+  CustomDomain,
+  ListCustomDomainsParams,
+} from './schemas/customDomains.js';
+// Deploy types
 export type {
-  MetricDataPoint,
-  MetricSeries,
-  MetricResponse,
-  MetricsParams,
-  BandwidthSourcesParams,
-  HttpMetricsParams,
-} from './schemas/metrics.js';
-
-// Maintenance types
+  CreateDeployInput,
+  Deploy,
+  ListDeploysParams,
+  RollbackDeployInput,
+} from './schemas/deploys.js';
+// Disk types
 export type {
-  MaintenanceRun,
-  UpdateMaintenanceInput,
-  ListMaintenanceParams,
-} from './schemas/maintenance.js';
-
-// Notification Settings types
+  CreateDiskInput,
+  Disk,
+  DiskSnapshot,
+  ListDisksParams,
+  RestoreSnapshotInput,
+  UpdateDiskInput,
+} from './schemas/disks.js';
+// Environment Group types
 export type {
-  NotificationSettings,
-  NotificationOverride,
-  UpdateNotificationSettingsInput,
-  UpdateNotificationOverrideInput,
-} from './schemas/notificationSettings.js';
-
-// Audit Log types
-export type { AuditLog, ListAuditLogsParams } from './schemas/auditLogs.js';
-
+  CreateEnvGroupInput,
+  EnvGroup,
+  ListEnvGroupsParams,
+  UpdateEnvGroupInput,
+} from './schemas/envGroups.js';
+// Environment types
+export type {
+  AddResourcesInput,
+  CreateEnvironmentInput,
+  Environment,
+  ListEnvironmentsParams,
+  RemoveResourcesInput,
+  UpdateEnvironmentInput,
+} from './schemas/environments.js';
 // Event types
 export type { Event } from './schemas/events.js';
+// Header types
+export type { Header, HeaderInput, ListHeadersParams } from './schemas/headers.js';
+// Job types
+export type { CreateJobInput, Job, ListJobsParams } from './schemas/jobs.js';
+// Key Value types
+export {
+  type CreateKeyValueInput,
+  type KeyValue,
+  type KeyValueConnectionInfo,
+  type KeyValuePlan,
+  KeyValuePlanSchema,
+  type ListKeyValueParams,
+  type UpdateKeyValueInput,
+} from './schemas/keyValue.js';
+// Log types
+export type { ListLogsParams, LogEntry } from './schemas/logs.js';
+// Maintenance types
+export type {
+  ListMaintenanceParams,
+  MaintenanceRun,
+  UpdateMaintenanceInput,
+} from './schemas/maintenance.js';
+// Metric types
+export type {
+  BandwidthSourcesParams,
+  HttpMetricsParams,
+  MetricDataPoint,
+  MetricResponse,
+  MetricSeries,
+  MetricsParams,
+} from './schemas/metrics.js';
+// Notification Settings types
+export type {
+  NotificationOverride,
+  NotificationSettings,
+  UpdateNotificationOverrideInput,
+  UpdateNotificationSettingsInput,
+} from './schemas/notificationSettings.js';
+// Postgres types
+export {
+  type CreatePostgresInput,
+  type CreatePostgresUserInput,
+  type ListPostgresParams,
+  type Postgres,
+  type PostgresConnectionInfo,
+  type PostgresExport,
+  type PostgresPlan,
+  PostgresPlanSchema,
+  type PostgresRecoveryInfo,
+  type PostgresUser,
+  type PostgresVersion,
+  PostgresVersionSchema,
+  type RecoverPostgresInput,
+  type UpdatePostgresInput,
+} from './schemas/postgres.js';
+// Project types
+export type {
+  CreateProjectInput,
+  ListProjectsParams,
+  Project,
+  UpdateProjectInput,
+} from './schemas/projects.js';
+// Redis types (deprecated)
+export type {
+  CreateRedisInput,
+  ListRedisParams,
+  Redis,
+  RedisConnectionInfo,
+  UpdateRedisInput,
+} from './schemas/redis.js';
+// Registry Credential types
+export {
+  type CreateRegistryCredentialInput,
+  type ListRegistryCredentialsParams,
+  type RegistryCredentialFull,
+  type RegistryType,
+  RegistryTypeSchema,
+  type UpdateRegistryCredentialInput,
+} from './schemas/registryCredentials.js';
+// Route types
+export type { ListRoutesParams, Route, RouteInput, RoutePatchInput } from './schemas/routes.js';
+// Service types
+export type {
+  AutoscalingInput,
+  BackgroundWorkerDetails,
+  CreateServiceInput,
+  CronJobDetails,
+  ListServicesParams,
+  PreviewServiceInput,
+  PrivateServiceDetails,
+  ScaleServiceInput,
+  Service,
+  ServiceAndDeploy,
+  ServiceInstance,
+  StaticSiteDetails,
+  UpdateServiceInput,
+  WebServiceDetails,
+} from './schemas/services.js';
+// User types
+export type { User } from './schemas/users.js';
+// Webhook types
+export type {
+  CreateWebhookInput,
+  ListWebhooksParams,
+  UpdateWebhookInput,
+  Webhook,
+  WebhookEvent,
+} from './schemas/webhooks.js';
+// Workspace types
+export {
+  type ListWorkspacesParams,
+  type TeamMember,
+  type TeamMemberRole,
+  TeamMemberRoleSchema,
+  type UpdateTeamMemberInput,
+  type Workspace,
+} from './schemas/workspaces.js';

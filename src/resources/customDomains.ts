@@ -1,21 +1,21 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  CustomDomainSchema,
-  CustomDomainWithCursorSchema,
+  type CreateCustomDomainInput,
   CreateCustomDomainInputSchema,
   type CustomDomain,
+  CustomDomainSchema,
   type CustomDomainWithCursor,
-  type CreateCustomDomainInput,
+  CustomDomainWithCursorSchema,
   type ListCustomDomainsParams,
 } from '../schemas/customDomains.js';
+import { BaseResource } from './base.js';
 
 /**
  * Build query parameters for list custom domains endpoint
  */
 function buildListQuery(
-  params?: ListCustomDomainsParams
+  params?: ListCustomDomainsParams,
 ): Record<string, string | number | boolean | undefined> {
   if (!params) return {};
 
@@ -47,12 +47,12 @@ export class CustomDomainsResource extends BaseResource {
    */
   async list(
     serviceId: string,
-    params?: ListCustomDomainsParams
+    params?: ListCustomDomainsParams,
   ): Promise<PaginatedResponse<CustomDomain>> {
     const query = buildListQuery(params);
     const response = await this.http.get<CustomDomainWithCursor[]>(
       `/services/${serviceId}/custom-domains`,
-      query
+      query,
     );
 
     const validated = this.validateArray(CustomDomainWithCursorSchema, response.data);
@@ -70,7 +70,7 @@ export class CustomDomainsResource extends BaseResource {
    */
   async *listAll(
     serviceId: string,
-    params?: ListCustomDomainsParams & AutoPaginateOptions
+    params?: ListCustomDomainsParams & AutoPaginateOptions,
   ): AsyncGenerator<CustomDomain, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -80,7 +80,7 @@ export class CustomDomainsResource extends BaseResource {
       const query = buildListQuery({ ...restParams, cursor, limit });
       const response = await this.http.get<CustomDomainWithCursor[]>(
         `/services/${serviceId}/custom-domains`,
-        query
+        query,
       );
       const validated = this.validateArray(CustomDomainWithCursorSchema, response.data);
 
@@ -116,7 +116,7 @@ export class CustomDomainsResource extends BaseResource {
     const validated = this.validate(CreateCustomDomainInputSchema, input);
     const response = await this.http.post<CustomDomain>(
       `/services/${serviceId}/custom-domains`,
-      validated
+      validated,
     );
     return this.validate(CustomDomainSchema, response.data);
   }
@@ -130,7 +130,7 @@ export class CustomDomainsResource extends BaseResource {
    */
   async retrieve(serviceId: string, customDomainIdOrName: string): Promise<CustomDomain> {
     const response = await this.http.get<CustomDomain>(
-      `/services/${serviceId}/custom-domains/${customDomainIdOrName}`
+      `/services/${serviceId}/custom-domains/${customDomainIdOrName}`,
     );
     return this.validate(CustomDomainSchema, response.data);
   }
@@ -156,7 +156,7 @@ export class CustomDomainsResource extends BaseResource {
    */
   async verify(serviceId: string, customDomainIdOrName: string): Promise<CustomDomain> {
     const response = await this.http.post<CustomDomain>(
-      `/services/${serviceId}/custom-domains/${customDomainIdOrName}/verify`
+      `/services/${serviceId}/custom-domains/${customDomainIdOrName}/verify`,
     );
     return this.validate(CustomDomainSchema, response.data);
   }

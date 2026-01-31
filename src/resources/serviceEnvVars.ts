@@ -1,14 +1,14 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  EnvVarSchema,
-  EnvVarWithCursorSchema,
-  EnvVarInputSchema,
   type EnvVar,
-  type EnvVarWithCursor,
   type EnvVarInput,
+  EnvVarInputSchema,
+  EnvVarSchema,
+  type EnvVarWithCursor,
+  EnvVarWithCursorSchema,
 } from '../schemas/common.js';
+import { BaseResource } from './base.js';
 
 export interface ListEnvVarsParams {
   cursor?: string;
@@ -35,7 +35,7 @@ export class ServiceEnvVarsResource extends BaseResource {
 
     const response = await this.http.get<EnvVarWithCursor[]>(
       `/services/${serviceId}/env-vars`,
-      query
+      query,
     );
 
     const validated = this.validateArray(EnvVarWithCursorSchema, response.data);
@@ -53,7 +53,7 @@ export class ServiceEnvVarsResource extends BaseResource {
    */
   async *listAll(
     serviceId: string,
-    params?: ListEnvVarsParams & AutoPaginateOptions
+    params?: ListEnvVarsParams & AutoPaginateOptions,
   ): AsyncGenerator<EnvVar, void, unknown> {
     const { cursor: initialCursor, limit, maxItems } = params ?? {};
     let cursor = initialCursor;
@@ -66,7 +66,7 @@ export class ServiceEnvVarsResource extends BaseResource {
 
       const response = await this.http.get<EnvVarWithCursor[]>(
         `/services/${serviceId}/env-vars`,
-        query
+        query,
       );
       const validated = this.validateArray(EnvVarWithCursorSchema, response.data);
 
@@ -104,7 +104,7 @@ export class ServiceEnvVarsResource extends BaseResource {
     const validated = this.validateArray(EnvVarInputSchema, envVars);
     const response = await this.http.put<EnvVarWithCursor[]>(
       `/services/${serviceId}/env-vars`,
-      validated
+      validated,
     );
     return this.validateArray(EnvVarWithCursorSchema, response.data).map((v) => v.envVar);
   }

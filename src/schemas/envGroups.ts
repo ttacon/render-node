@@ -19,7 +19,7 @@ export const EnvGroupSchema = z.object({
         id: z.string(),
         name: z.string(),
         type: z.string(),
-      })
+      }),
     )
     .optional(),
 });
@@ -43,7 +43,7 @@ export const CreateEnvGroupInputSchema = z.object({
       z.object({
         key: z.string(),
         value: z.string(),
-      })
+      }),
     )
     .optional(),
   secretFiles: z
@@ -51,7 +51,7 @@ export const CreateEnvGroupInputSchema = z.object({
       z.object({
         name: z.string(),
         content: z.string(),
-      })
+      }),
     )
     .optional(),
 });
@@ -64,7 +64,7 @@ export const UpdateEnvGroupInputSchema = z.object({
       z.object({
         key: z.string(),
         value: z.string(),
-      })
+      }),
     )
     .optional(),
   secretFiles: z
@@ -72,7 +72,7 @@ export const UpdateEnvGroupInputSchema = z.object({
       z.object({
         name: z.string(),
         content: z.string(),
-      })
+      }),
     )
     .optional(),
 });

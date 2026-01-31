@@ -1,6 +1,6 @@
-import type { HttpClient } from '../http.js';
 import type { ZodSchema } from 'zod';
 import { RenderValidationError } from '../errors.js';
+import type { HttpClient } from '../http.js';
 
 /**
  * Base class for all resource clients
@@ -20,7 +20,7 @@ export abstract class BaseResource {
     if (!result.success) {
       throw new RenderValidationError(
         `Response validation failed: ${result.error.message}`,
-        result.error.errors
+        result.error.errors,
       );
     }
     return result.data;
@@ -35,7 +35,7 @@ export abstract class BaseResource {
       if (!result.success) {
         throw new RenderValidationError(
           `Response validation failed at index ${index}: ${result.error.message}`,
-          result.error.errors
+          result.error.errors,
         );
       }
       return result.data;

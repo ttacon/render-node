@@ -1,14 +1,14 @@
-import { BaseResource } from './base.js';
 import {
-  MetricResponseSchema,
-  type MetricResponse,
-  type MetricsParams,
   type BandwidthSourcesParams,
   type HttpMetricsParams,
+  type MetricResponse,
+  MetricResponseSchema,
+  type MetricsParams,
 } from '../schemas/metrics.js';
+import { BaseResource } from './base.js';
 
 function buildMetricsQuery(
-  params: MetricsParams
+  params: MetricsParams,
 ): Record<string, string | number | boolean | undefined> {
   const query: Record<string, string | number | boolean | undefined> = {
     resourceIds: params.resourceIds.join(','),
@@ -32,7 +32,7 @@ export class MetricsResource extends BaseResource {
   async cpuLimit(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/cpu-limit',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -40,7 +40,7 @@ export class MetricsResource extends BaseResource {
   async cpuTarget(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/cpu-target',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -48,7 +48,7 @@ export class MetricsResource extends BaseResource {
   async memory(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/memory',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -56,7 +56,7 @@ export class MetricsResource extends BaseResource {
   async memoryLimit(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/memory-limit',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -64,7 +64,7 @@ export class MetricsResource extends BaseResource {
   async memoryTarget(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/memory-target',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -72,7 +72,7 @@ export class MetricsResource extends BaseResource {
   async bandwidth(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/bandwidth',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -105,7 +105,7 @@ export class MetricsResource extends BaseResource {
   async diskUsage(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/disk-usage',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -113,7 +113,7 @@ export class MetricsResource extends BaseResource {
   async diskCapacity(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/disk-capacity',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -121,7 +121,7 @@ export class MetricsResource extends BaseResource {
   async instanceCount(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/instance-count',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -129,7 +129,7 @@ export class MetricsResource extends BaseResource {
   async activeConnections(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/active-connections',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -137,7 +137,7 @@ export class MetricsResource extends BaseResource {
   async replicationLag(params: MetricsParams): Promise<MetricResponse> {
     const response = await this.http.get<MetricResponse>(
       '/metrics/replication-lag',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return this.validate(MetricResponseSchema, response.data);
   }
@@ -145,7 +145,7 @@ export class MetricsResource extends BaseResource {
   async applicationFilters(params: MetricsParams): Promise<unknown> {
     const response = await this.http.get<unknown>(
       '/metrics/filters/application',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return response.data;
   }
@@ -153,7 +153,7 @@ export class MetricsResource extends BaseResource {
   async httpFilters(params: MetricsParams): Promise<unknown> {
     const response = await this.http.get<unknown>(
       '/metrics/filters/http',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return response.data;
   }
@@ -161,7 +161,7 @@ export class MetricsResource extends BaseResource {
   async pathFilters(params: MetricsParams): Promise<unknown> {
     const response = await this.http.get<unknown>(
       '/metrics/filters/path',
-      buildMetricsQuery(params)
+      buildMetricsQuery(params),
     );
     return response.data;
   }

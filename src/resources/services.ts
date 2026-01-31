@@ -1,41 +1,41 @@
-import { BaseResource } from './base.js';
 import type { HttpClient } from '../http.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  ServiceSchema,
-  ServiceWithCursorSchema,
-  ServiceAndDeploySchema,
-  CreateServiceInputSchema,
-  UpdateServiceInputSchema,
-  ScaleServiceInputSchema,
-  AutoscalingInputSchema,
-  ServiceInstanceSchema,
-  PreviewServiceInputSchema,
-  type Service,
-  type ServiceWithCursor,
-  type ServiceAndDeploy,
-  type CreateServiceInput,
-  type UpdateServiceInput,
-  type ScaleServiceInput,
   type AutoscalingInput,
-  type ServiceInstance,
+  AutoscalingInputSchema,
+  type CreateServiceInput,
+  CreateServiceInputSchema,
   type ListServicesParams,
   type PreviewServiceInput,
+  PreviewServiceInputSchema,
+  type ScaleServiceInput,
+  ScaleServiceInputSchema,
+  type Service,
+  type ServiceAndDeploy,
+  ServiceAndDeploySchema,
+  type ServiceInstance,
+  ServiceInstanceSchema,
+  ServiceSchema,
+  type ServiceWithCursor,
+  ServiceWithCursorSchema,
+  type UpdateServiceInput,
+  UpdateServiceInputSchema,
 } from '../schemas/services.js';
-import { DeploysResource } from './deploys.js';
+import { BaseResource } from './base.js';
 import { CustomDomainsResource } from './customDomains.js';
+import { DeploysResource } from './deploys.js';
+import { HeadersResource } from './headers.js';
+import { JobsResource } from './jobs.js';
+import { RoutesResource } from './routes.js';
 import { ServiceEnvVarsResource } from './serviceEnvVars.js';
 import { ServiceSecretFilesResource } from './serviceSecretFiles.js';
-import { HeadersResource } from './headers.js';
-import { RoutesResource } from './routes.js';
-import { JobsResource } from './jobs.js';
 
 /**
  * Build query parameters for list services endpoint
  */
 function buildListQuery(
-  params?: ListServicesParams
+  params?: ListServicesParams,
 ): Record<string, string | number | boolean | undefined> {
   if (!params) return {};
 
@@ -158,7 +158,7 @@ export class ServicesResource extends BaseResource {
    * ```
    */
   async *listAll(
-    params?: ListServicesParams & AutoPaginateOptions
+    params?: ListServicesParams & AutoPaginateOptions,
   ): AsyncGenerator<Service, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -182,9 +182,7 @@ export class ServicesResource extends BaseResource {
         }
       }
 
-      cursor = extractCursor(
-        validated.map((v) => ({ cursor: v.cursor, item: v.service }))
-      );
+      cursor = extractCursor(validated.map((v) => ({ cursor: v.cursor, item: v.service })));
 
       if (!cursor) {
         break;
@@ -396,7 +394,7 @@ export class ServicesResource extends BaseResource {
     const validated = input ? this.validate(PreviewServiceInputSchema, input) : undefined;
     const response = await this.http.post<ServiceAndDeploy>(
       `/services/${serviceId}/preview`,
-      validated
+      validated,
     );
     return this.validate(ServiceAndDeploySchema, response.data);
   }

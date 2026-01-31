@@ -1,11 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
-  extractCursor,
-  unwrapItems,
-  createPaginatedResponse,
-  paginate,
-  collectAll,
   type CursorResponse,
+  collectAll,
+  createPaginatedResponse,
+  extractCursor,
+  paginate,
+  unwrapItems,
 } from './pagination.js';
 
 describe('Pagination', () => {
@@ -47,9 +47,7 @@ describe('Pagination', () => {
     });
 
     it('should create paginated response with hasMore=false when below limit', () => {
-      const items: CursorResponse<{ id: string }>[] = [
-        { cursor: 'cursor1', item: { id: '1' } },
-      ];
+      const items: CursorResponse<{ id: string }>[] = [{ cursor: 'cursor1', item: { id: '1' } }];
       const response = createPaginatedResponse(items, 10);
       expect(response.items).toHaveLength(1);
       expect(response.hasMore).toBe(false);
@@ -66,7 +64,10 @@ describe('Pagination', () => {
   describe('paginate', () => {
     it('should yield all items across multiple pages', async () => {
       let callCount = 0;
-      const fetchPage = async (cursor?: string, limit?: number): Promise<CursorResponse<number>[]> => {
+      const fetchPage = async (
+        _cursor?: string,
+        _limit?: number,
+      ): Promise<CursorResponse<number>[]> => {
         callCount++;
         if (callCount === 1) {
           return [
@@ -75,9 +76,7 @@ describe('Pagination', () => {
           ];
         }
         if (callCount === 2) {
-          return [
-            { cursor: 'c3', item: 3 },
-          ];
+          return [{ cursor: 'c3', item: 3 }];
         }
         return [];
       };

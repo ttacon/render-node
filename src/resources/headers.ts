@@ -1,20 +1,20 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  HeaderWithCursorSchema,
-  HeaderInputSchema,
   type Header,
-  type HeaderWithCursor,
   type HeaderInput,
+  HeaderInputSchema,
+  type HeaderWithCursor,
+  HeaderWithCursorSchema,
   type ListHeadersParams,
 } from '../schemas/headers.js';
+import { BaseResource } from './base.js';
 
 /**
  * Build query parameters for list headers endpoint
  */
 function buildListQuery(
-  params?: ListHeadersParams
+  params?: ListHeadersParams,
 ): Record<string, string | number | boolean | undefined> {
   if (!params) return {};
 
@@ -45,7 +45,7 @@ export class HeadersResource extends BaseResource {
     const query = buildListQuery(params);
     const response = await this.http.get<HeaderWithCursor[]>(
       `/services/${serviceId}/headers`,
-      query
+      query,
     );
 
     const validated = this.validateArray(HeaderWithCursorSchema, response.data);
@@ -63,7 +63,7 @@ export class HeadersResource extends BaseResource {
    */
   async *listAll(
     serviceId: string,
-    params?: ListHeadersParams & AutoPaginateOptions
+    params?: ListHeadersParams & AutoPaginateOptions,
   ): AsyncGenerator<Header, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;
@@ -73,7 +73,7 @@ export class HeadersResource extends BaseResource {
       const query = buildListQuery({ ...restParams, cursor, limit });
       const response = await this.http.get<HeaderWithCursor[]>(
         `/services/${serviceId}/headers`,
-        query
+        query,
       );
       const validated = this.validateArray(HeaderWithCursorSchema, response.data);
 
@@ -109,7 +109,7 @@ export class HeadersResource extends BaseResource {
     const validated = this.validateArray(HeaderInputSchema, headers);
     const response = await this.http.post<HeaderWithCursor[]>(
       `/services/${serviceId}/headers`,
-      validated
+      validated,
     );
     return this.validateArray(HeaderWithCursorSchema, response.data).map((v) => v.header);
   }
@@ -125,7 +125,7 @@ export class HeadersResource extends BaseResource {
     const validated = this.validateArray(HeaderInputSchema, headers);
     const response = await this.http.put<HeaderWithCursor[]>(
       `/services/${serviceId}/headers`,
-      validated
+      validated,
     );
     return this.validateArray(HeaderWithCursorSchema, response.data).map((v) => v.header);
   }

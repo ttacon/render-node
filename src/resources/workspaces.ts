@@ -1,17 +1,17 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  WorkspaceSchema,
-  WorkspaceWithCursorSchema,
+  type ListWorkspacesParams,
+  type TeamMember,
   TeamMemberSchema,
+  type UpdateTeamMemberInput,
   UpdateTeamMemberInputSchema,
   type Workspace,
+  WorkspaceSchema,
   type WorkspaceWithCursor,
-  type TeamMember,
-  type UpdateTeamMemberInput,
-  type ListWorkspacesParams,
+  WorkspaceWithCursorSchema,
 } from '../schemas/workspaces.js';
+import { BaseResource } from './base.js';
 
 /**
  * Workspaces resource client
@@ -34,7 +34,7 @@ export class WorkspacesResource extends BaseResource {
   }
 
   async *listAll(
-    params?: ListWorkspacesParams & AutoPaginateOptions
+    params?: ListWorkspacesParams & AutoPaginateOptions,
   ): AsyncGenerator<Workspace, void, unknown> {
     const { cursor: initialCursor, limit, maxItems } = params ?? {};
     let cursor = initialCursor;
@@ -74,12 +74,12 @@ export class WorkspacesResource extends BaseResource {
   async updateMember(
     ownerId: string,
     userId: string,
-    input: UpdateTeamMemberInput
+    input: UpdateTeamMemberInput,
   ): Promise<TeamMember> {
     const validated = this.validate(UpdateTeamMemberInputSchema, input);
     const response = await this.http.patch<TeamMember>(
       `/owners/${ownerId}/members/${userId}`,
-      validated
+      validated,
     );
     return this.validate(TeamMemberSchema, response.data);
   }

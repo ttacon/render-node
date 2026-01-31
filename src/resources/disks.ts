@@ -1,22 +1,22 @@
-import { BaseResource } from './base.js';
-import type { PaginatedResponse, CursorResponse, AutoPaginateOptions } from '../pagination.js';
+import type { AutoPaginateOptions, CursorResponse, PaginatedResponse } from '../pagination.js';
 import { createPaginatedResponse, extractCursor } from '../pagination.js';
 import {
-  DiskSchema,
-  DiskWithCursorSchema,
-  CreateDiskInputSchema,
-  UpdateDiskInputSchema,
-  DiskSnapshotSchema,
-  RestoreSnapshotInputSchema,
-  type Disk,
-  type DiskWithCursor,
   type CreateDiskInput,
-  type UpdateDiskInput,
+  CreateDiskInputSchema,
+  type Disk,
+  DiskSchema,
   type DiskSnapshot,
-  type RestoreSnapshotInput,
+  DiskSnapshotSchema,
+  type DiskWithCursor,
+  DiskWithCursorSchema,
   type ListDisksParams,
   type ListSnapshotsParams,
+  type RestoreSnapshotInput,
+  RestoreSnapshotInputSchema,
+  type UpdateDiskInput,
+  UpdateDiskInputSchema,
 } from '../schemas/disks.js';
+import { BaseResource } from './base.js';
 
 /**
  * Disks resource client
@@ -48,7 +48,7 @@ export class DisksResource extends BaseResource {
    * Async generator that automatically fetches all disks
    */
   async *listAll(
-    params?: ListDisksParams & AutoPaginateOptions
+    params?: ListDisksParams & AutoPaginateOptions,
   ): AsyncGenerator<Disk, void, unknown> {
     const { cursor: initialCursor, limit, maxItems, ...restParams } = params ?? {};
     let cursor = initialCursor;

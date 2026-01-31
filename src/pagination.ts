@@ -61,7 +61,7 @@ export function unwrapItems<T>(items: CursorResponse<T>[]): T[] {
  */
 export function createPaginatedResponse<T>(
   items: CursorResponse<T>[],
-  limit?: number
+  limit?: number,
 ): PaginatedResponse<T> {
   const cursor = extractCursor(items);
   // If we got fewer items than the limit (or default 20), there are no more pages
@@ -78,17 +78,14 @@ export function createPaginatedResponse<T>(
 /**
  * Type for a fetch function that returns cursor-wrapped items
  */
-export type FetchPage<T> = (
-  cursor?: string,
-  limit?: number
-) => Promise<CursorResponse<T>[]>;
+export type FetchPage<T> = (cursor?: string, limit?: number) => Promise<CursorResponse<T>[]>;
 
 /**
  * Create an async generator that automatically fetches all pages
  */
 export async function* paginate<T>(
   fetchPage: FetchPage<T>,
-  options: AutoPaginateOptions = {}
+  options: AutoPaginateOptions = {},
 ): AsyncGenerator<T, void, unknown> {
   const { cursor: initialCursor, limit, maxItems } = options;
   let cursor = initialCursor;
@@ -136,12 +133,12 @@ export async function collectAll<T>(generator: AsyncGenerator<T>): Promise<T[]> 
 export function createPaginationHelpers<T, TParams extends PaginationParams>(
   http: HttpClient,
   path: string,
-  buildQuery: (params?: TParams) => Record<string, string | number | boolean | undefined>
+  buildQuery: (params?: TParams) => Record<string, string | number | boolean | undefined>,
 ) {
   const fetchPage = async (
     params?: TParams,
     cursor?: string,
-    limit?: number
+    limit?: number,
   ): Promise<CursorResponse<T>[]> => {
     const query = buildQuery(params);
     if (cursor) query.cursor = cursor;
