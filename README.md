@@ -1,6 +1,6 @@
 # render-api
 
-A TypeScript Node.js client for the [Render API](https://api-docs.render.com/).
+A TypeScript client for the [Render API](https://api-docs.render.com/). Built with Bun, works with Node.js and Bun.
 
 ## Features
 
@@ -16,7 +16,14 @@ A TypeScript Node.js client for the [Render API](https://api-docs.render.com/).
 ## Installation
 
 ```bash
+# Using bun
+bun add render-api
+
+# Using npm
 npm install render-api
+
+# Using pnpm
+pnpm add render-api
 ```
 
 ## Quick Start
@@ -190,7 +197,7 @@ try {
 For testing and exploration, use the built-in REPL:
 
 ```bash
-RENDER_API_KEY=rnd_xxx npm run repl
+RENDER_API_KEY=rnd_xxx bun run repl
 ```
 
 ```
@@ -214,22 +221,22 @@ render> .exit         # Exit
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Build
-npm run build
+bun run build
 
 # Run tests
-npm run test
+bun test
 
 # Type check
-npm run typecheck
+bun run typecheck
 
 # Lint
-npm run lint
+bun run check
 
 # Start REPL
-RENDER_API_KEY=xxx npm run repl
+RENDER_API_KEY=xxx bun run repl
 ```
 
 ## License
