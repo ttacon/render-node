@@ -1,0 +1,73 @@
+{
+  "name": "render-api",
+  "version": "0.0.0-development",
+  "description": "TypeScript Node.js client for the Render API",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "repl": "npx tsx scripts/repl.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NovaCove/node-render-api.git"
+  },
+  "keywords": [
+    "render",
+    "render.com",
+    "api",
+    "client",
+    "typescript",
+    "nodejs"
+  ],
+  "author": "NovaCove",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NovaCove/node-render-api/issues"
+  },
+  "homepage": "https://github.com/NovaCove/node-render-api#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@types/node": "^20.14.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.2",
+    "semantic-release": "^24.0.0",
+    "tsup": "^8.1.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
