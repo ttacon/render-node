@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ttacon/render-api/compare/v1.0.0...v1.1.0) (2026-02-03)
+
+
+### Features
+
+* add integration test script ([780f661](https://github.com/ttacon/render-api/commit/780f66159e418e4e4a3ed6af82c4e039d066f6d7))
+
 # 1.0.0 (2026-02-02)
 
 
