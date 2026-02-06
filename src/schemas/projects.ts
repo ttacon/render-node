@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { OwnerSchema } from './Owner';
 
 // ============================================================================
 // Project
@@ -7,7 +8,7 @@ import { z } from 'zod';
 export const ProjectSchema = z.object({
   id: z.string(),
   name: z.string(),
-  ownerId: z.string(),
+  owner: OwnerSchema,
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -30,7 +31,7 @@ export const CreateProjectInputSchema = z.object({
     .array(
       z.object({
         name: z.string(),
-        protectedStatus: z.enum(['protected', 'not_protected']).optional(),
+        protectedStatus: z.enum(['protected', 'unprotected']).optional(),
       }),
     )
     .optional(),

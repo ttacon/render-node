@@ -4,6 +4,7 @@ import * as repl from 'node:repl';
 import { RenderClient } from '../src/index.js';
 
 const API_KEY = process.env.RENDER_API_KEY;
+const DEBUG = process.env.RENDER_DEBUG === 'true' || process.env.RENDER_DEBUG === '1';
 
 if (!API_KEY) {
   console.error('\x1b[31mError: RENDER_API_KEY environment variable is not set.\x1b[0m');
@@ -15,11 +16,18 @@ if (!API_KEY) {
   console.error('  export RENDER_API_KEY=rnd_xxx');
   console.error('  bun run repl');
   console.error('');
+  console.error('Debug logging:');
+  console.error('  RENDER_DEBUG=true RENDER_API_KEY=rnd_xxx bun run repl');
+  console.error('');
   process.exit(1);
 }
 
 // Create the authenticated client
-const render = new RenderClient({ apiKey: API_KEY });
+const render = new RenderClient({ apiKey: API_KEY, debug: DEBUG });
+
+if (DEBUG) {
+  console.log('\x1b[33m[DEBUG MODE ENABLED]\x1b[0m');
+}
 
 console.log('\x1b[36m');
 console.log('╔═══════════════════════════════════════════════════════════╗');

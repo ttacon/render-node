@@ -16,6 +16,7 @@ export interface HttpClientOptions {
   baseUrl?: string;
   timeout?: number;
   maxRetries?: number;
+  debug?: boolean;
 }
 
 export interface RequestOptions {
@@ -72,12 +73,48 @@ export class HttpClient {
   private readonly baseUrl: string;
   private readonly timeout: number;
   private readonly maxRetries: number;
+  private readonly debug: boolean;
 
   constructor(options: HttpClientOptions) {
     this.apiKey = options.apiKey;
     this.baseUrl = options.baseUrl ?? DEFAULT_BASE_URL;
     this.timeout = options.timeout ?? DEFAULT_TIMEOUT;
     this.maxRetries = options.maxRetries ?? DEFAULT_MAX_RETRIES;
+    this.debug = options.debug ?? false;
+  }
+
+  /**
+   * Sanitize headers for debug output (hide sensitive information)
+   */
+  private sanitizeHeaders(headers: Record<string, string>): Record<string, string> {
+    const sanitized = { ...headers };
+    if (sanitized.Authorization) {
+      sanitized.Authorization = 'Bearer ***';
+    }
+    return sanitized;
+  }
+
+  /**
+   * Log debug information if debug mode is enabled
+   */
+  private log(message: string, ...args: unknown[]): void {
+    if (this.debug) {
+      console.error(`[DEBUG] ${message}`, ...args);
+    }
+  }
+
+  /**
+   * Format body for debug output (truncate if too large)
+   */
+  private formatBody(body: unknown, maxLength = 500): string {
+    if (body === undefined || body === null) {
+      return '';
+    }
+    const str = typeof body === 'string' ? body : JSON.stringify(body);
+    if (str.length > maxLength) {
+      return `${str.slice(0, maxLength)}... (truncated, ${str.length} chars total)`;
+    }
+    return str;
   }
 
   /**
@@ -131,7 +168,20 @@ export class HttpClient {
       headers['Content-Type'] = 'application/json';
     }
 
+    // Log request details
+    if (this.debug) {
+      this.log(`→ ${method} ${url}`);
+      this.log('  Headers:', this.sanitizeHeaders(headers));
+      if (query && Object.keys(query).length > 0) {
+        this.log('  Query:', query);
+      }
+      if (body !== undefined) {
+        this.log('  Body:', this.formatBody(body));
+      }
+    }
+
     let lastError: Error | undefined;
+    const startTime = Date.now();
 
     for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
       const controller = new AbortController();
@@ -149,8 +199,17 @@ export class HttpClient {
 
         // Success responses
         if (response.ok) {
+          const duration = ((Date.now() - startTime) / 1000).toFixed(3);
+
           // Handle 204 No Content
           if (response.status === 204) {
+            if (this.debug) {
+              this.log(`← ${response.status} ${response.statusText} (${duration}s)`);
+              const requestId = response.headers.get('x-request-id');
+              if (requestId) {
+                this.log(`  Request ID: ${requestId}`);
+              }
+            }
             return {
               data: undefined as T,
               status: response.status,
@@ -159,6 +218,16 @@ export class HttpClient {
           }
 
           const data = (await response.json()) as T;
+
+          if (this.debug) {
+            this.log(`← ${response.status} ${response.statusText} (${duration}s)`);
+            const requestId = response.headers.get('x-request-id');
+            if (requestId) {
+              this.log(`  Request ID: ${requestId}`);
+            }
+            this.log('  Response:', this.formatBody(data));
+          }
+
           return {
             data,
             status: response.status,
@@ -175,9 +244,26 @@ export class HttpClient {
         const errorMessage =
           errorResponse?.message ?? `Request failed with status ${response.status}`;
 
+        const duration = ((Date.now() - startTime) / 1000).toFixed(3);
+
+        if (this.debug) {
+          this.log(`✗ ${response.status} ${response.statusText} (${duration}s)`);
+          if (requestId) {
+            this.log(`  Request ID: ${requestId}`);
+          }
+          if (errorResponse) {
+            this.log('  Error:', errorResponse);
+          }
+        }
+
         // Check if we should retry
         if (!skipRetry && this.isRetryable(response.status) && attempt < this.maxRetries) {
           const retryDelay = this.getRetryDelay(attempt, retryAfter);
+          if (this.debug) {
+            this.log(
+              `  Retry attempt ${attempt + 1}/${this.maxRetries} (status ${response.status}, waiting ${retryDelay}ms)`,
+            );
+          }
           await delay(retryDelay);
           continue;
         }
@@ -200,12 +286,21 @@ export class HttpClient {
             requestTimeout,
           );
 
+          const duration = ((Date.now() - startTime) / 1000).toFixed(3);
+          if (this.debug) {
+            this.log(`✗ Timeout after ${duration}s (limit: ${requestTimeout}ms)`);
+          }
+
           // Don't retry timeouts
           if (skipRetry || attempt >= this.maxRetries) {
             throw lastError;
           }
 
-          await delay(this.getRetryDelay(attempt));
+          const retryDelay = this.getRetryDelay(attempt);
+          if (this.debug) {
+            this.log(`  Retry attempt ${attempt + 1}/${this.maxRetries} (waiting ${retryDelay}ms)`);
+          }
+          await delay(retryDelay);
           continue;
         }
 
@@ -213,15 +308,30 @@ export class HttpClient {
         if (error instanceof TypeError) {
           lastError = new RenderNetworkError(`Network error: ${error.message}`, error);
 
+          const duration = ((Date.now() - startTime) / 1000).toFixed(3);
+          if (this.debug) {
+            this.log(`✗ Network error after ${duration}s: ${error.message}`);
+          }
+
           // Retry network errors
           if (!skipRetry && attempt < this.maxRetries) {
-            await delay(this.getRetryDelay(attempt));
+            const retryDelay = this.getRetryDelay(attempt);
+            if (this.debug) {
+              this.log(
+                `  Retry attempt ${attempt + 1}/${this.maxRetries} (waiting ${retryDelay}ms)`,
+              );
+            }
+            await delay(retryDelay);
             continue;
           }
           throw lastError;
         }
 
         // Unknown error
+        if (this.debug) {
+          const duration = ((Date.now() - startTime) / 1000).toFixed(3);
+          this.log(`✗ Unknown error after ${duration}s:`, error);
+        }
         throw error;
       }
     }

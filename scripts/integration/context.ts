@@ -24,11 +24,16 @@ export class TestContext {
 
   constructor(config: TestConfig) {
     this.config = config;
+    const debug = process.env.RENDER_DEBUG === 'true' || process.env.RENDER_DEBUG === '1';
     this.client = new RenderClient({
       apiKey: config.apiKey,
       timeout: config.timeout,
+      debug,
     });
     this.runId = this.generateRunId();
+    if (debug) {
+      console.log('\x1b[33m[DEBUG MODE ENABLED]\x1b[0m');
+    }
   }
 
   private generateRunId(): string {

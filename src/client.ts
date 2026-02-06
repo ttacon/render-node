@@ -40,6 +40,10 @@ export interface RenderClientOptions {
    * Maximum number of retries for failed requests (defaults to 3)
    */
   maxRetries?: number;
+  /**
+   * Enable debug logging for all API requests and responses
+   */
+  debug?: boolean;
 }
 
 /**
@@ -233,6 +237,7 @@ export class RenderClient {
       baseUrl: options.baseUrl,
       timeout: options.timeout,
       maxRetries: options.maxRetries,
+      debug: options.debug,
     };
 
     this.http = new HttpClient(httpOptions);

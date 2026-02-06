@@ -80,7 +80,46 @@ const render = new RenderClient({
   baseUrl: 'https://api.render.com/v1',  // Optional: API base URL
   timeout: 30000,                 // Optional: Request timeout in ms (default: 30000)
   maxRetries: 3,                  // Optional: Max retries for failed requests (default: 3)
+  debug: false,                   // Optional: Enable debug logging (default: false)
 });
+```
+
+### Debug Logging
+
+Enable detailed logging of all HTTP requests, responses, validation, and errors:
+
+```typescript
+// Programmatically
+const render = new RenderClient({ 
+  apiKey: process.env.RENDER_API_KEY,
+  debug: true 
+});
+
+// Using environment variable with REPL
+RENDER_DEBUG=true RENDER_API_KEY=xxx bun run repl
+
+// Using environment variable with integration tests
+RENDER_DEBUG=true RENDER_API_KEY=xxx bun run scripts/integration-test.ts
+```
+
+Debug output includes:
+- **Request details**: Method, URL, sanitized headers, query params, request body (truncated if large)
+- **Response details**: Status, duration, request ID, response body (truncated if large)
+- **Validation**: Success/failure of schema validation with detailed error messages
+- **Retries**: Retry attempts with delays for rate limits and transient failures
+- **Errors**: Detailed error messages with request IDs for troubleshooting
+
+Debug logs are written to `stderr` to avoid interfering with program output.
+
+```
+[DEBUG] → GET https://api.render.com/v1/services?limit=20
+[DEBUG]   Headers: { Authorization: 'Bearer ***', Accept: 'application/json' }
+[DEBUG]   Query: { limit: 20 }
+[DEBUG] ← 200 OK (0.342s)
+[DEBUG]   Request ID: req_xxxxx
+[DEBUG]   Response: [{"id":"srv-xxxxx","name":"my-api"...}] (truncated, 1234 chars total)
+[DEBUG] Validating array of 5 items
+[DEBUG] ✓ Validation successful
 ```
 
 ## Resources
