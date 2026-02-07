@@ -1,3 +1,16 @@
+# [1.2.0](https://github.com/ttacon/render-api/compare/v1.1.0...v1.2.0) (2026-02-07)
+
+
+### Bug Fixes
+
+* ensure our schema supports more modern postgres versions on Render ([230b294](https://github.com/ttacon/render-api/commit/230b294987127439d76d284cacd6d6cdc537311c))
+* remove errant import ([2bc9790](https://github.com/ttacon/render-api/commit/2bc979084d8f3e4736007799850df8e6644c5ee1))
+
+
+### Features
+
+* add better testing support ([fbf2785](https://github.com/ttacon/render-api/commit/fbf2785c9f04199ed44be8f38d8a3b7f0cbc2296))
+
 # [1.1.0](https://github.com/ttacon/render-api/compare/v1.0.0...v1.1.0) (2026-02-03)
 
 
