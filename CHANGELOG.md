@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/ttacon/render-api/compare/v1.2.1...v1.2.2) (2026-02-07)
+
+
+### Bug Fixes
+
+* ensure postgres ipAllowList is nullable not optional ([feb77c3](https://github.com/ttacon/render-api/commit/feb77c37ecefb8e558d5d670dce9e79059bc283a))
+
 ## [1.2.1](https://github.com/ttacon/render-api/compare/v1.2.0...v1.2.1) (2026-02-07)
 
 
