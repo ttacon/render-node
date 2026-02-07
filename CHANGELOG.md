@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/ttacon/render-api/compare/v1.2.0...v1.2.1) (2026-02-07)
+
+
+### Bug Fixes
+
+* ipAllowlist may come back as null ([2795be6](https://github.com/ttacon/render-api/commit/2795be645949637f732b950d9ea10a12035bbbd0))
+
 # [1.2.0](https://github.com/ttacon/render-api/compare/v1.1.0...v1.2.0) (2026-02-07)
 
 
